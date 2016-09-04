@@ -63,9 +63,8 @@ In this example, the LemonStand Access Token is loaded via a JSON file.
 ```
 
 ```js
-lsToken: grunt.file.readJSON('lemonstand-token.json'),
-
 grunt.initConfig({
+  lsToken: grunt.file.readJSON('lemonstand-token.json'),
   lemonsync: {
       options: {
         access_token: '<%= lsToken.lsAccessToken %>',
