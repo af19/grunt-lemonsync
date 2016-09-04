@@ -2,17 +2,17 @@
   "name": "grunt-lemonsync",
   "description": "A grunt plugin for working on LemonStand themes locally and pushing changes to stores.",
   "version": "0.1.0",
-  "homepage": "https://github.com/ubuntu/workspace",
+  "homepage": "https://github.com/af19/grunt-lemonsync",
   "author": {
     "name": "Amir Farzan",
     "email": "amir@lemonstand.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ubuntu/workspace.git"
+    "url": "git://github.com/af19/grunt-lemonsync.git"
   },
   "bugs": {
-    "url": "https://github.com/ubuntu/workspace/issues"
+    "url": "https://github.com/af19/grunt-lemonsync/issues"
   },
   "licenses": [
     {
