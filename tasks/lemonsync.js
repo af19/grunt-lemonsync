@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   var aws = require('aws-sdk');
   var fs = require('fs');
   var https = require('https');
+  var mime = require('mime-types');
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
@@ -66,6 +67,8 @@ module.exports = function(grunt) {
             
             s3.putObject({
               Bucket: bucket + '/' + store + '/themes/' + userOptions.theme_api_code,
+              ContentType: mime.contentType(file),
+              CacheControl: 'max-age=86400',
               Key: file,
               Body: fileStream
             }, function (err, data) {

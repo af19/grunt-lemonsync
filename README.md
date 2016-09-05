@@ -77,5 +77,6 @@ grunt.initConfig({
 ```
 
 ## Release History
+* 2016-09-04   v0.1.2   Added MIME type detection
 * 2016-09-04   v0.1.1   Updated package.json
 * 2016-09-04   v0.1.0   First release

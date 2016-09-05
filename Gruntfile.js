@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         theme_api_code: 'bones'
       },
       src: ['resources/**', 'pages/**']
-    },
+    }
 
   });
 
