@@ -39,6 +39,8 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.5.5",
+    "download-git-repo": "^0.1.2",
+    "git-clone": "^0.1.0",
     "mime-types": "^2.1.11"
   }
 }

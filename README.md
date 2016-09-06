@@ -40,7 +40,7 @@ grunt.initConfig({
 #### options.access_token (required)
 Type: `String`
 
-The LemonStand Access Token. You can load it via JSON as shown in the [example](#usage-examples) (remember to store your token in a secure place and exclude it from commits).
+The LemonStand Access Token. You can load it via JSON as shown in the [example](#basic-usage-examples) (remember to store your token in a secure place and exclude it from commits).
 
 #### options.store_host (required)
 Type: `String`
@@ -50,9 +50,18 @@ The domain name of your LemonStand store. E.G. `my-store.lemonstand.com`.
 #### options.theme_api_code (required)
 Type: `String`
 
-The API code for the theme you want to upload to. 
+A unique code to identify your theme in LemonStand's backend. The code can contain only Latin symbols, digits and the hyphen symbol. 
 
-### Usage Examples
+#### options.theme_repository (required)
+Type: `String`
+
+The public git repository to download the theme from. A `/theme` directory will be added to to your project. 
+
+- GitHub - `github:owner/name` or simply `owner/name`
+- GitLab - `gitlab:owner/name`
+- Bitbucket - `bitbucket:owner/name`
+
+### Basic Usage Examples
 
 In this example, the LemonStand Access Token is loaded via a JSON file.
 
@@ -69,14 +78,16 @@ grunt.initConfig({
       options: {
         access_token: '<%= lsToken.lsAccessToken %>',
         store_host: 'my-store.lemonstand.com',
-        theme_api_code: 'bones'
+        theme_api_code: 'my-first-custom-theme',
+        theme_repository: 'lemonstand/ls2-theme-zest'
       },
-      src: ['content/**', 'pages/**', 'partials/**', 'resources/**', 'templates/**', 'theme.yaml']
+      src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
     },
 });
 ```
 
 ## Release History
+* 2016-09-06   v1.0.0   Themes now imported from git
 * 2016-09-04   v0.1.2   Added MIME type detection
 * 2016-09-04   v0.1.1   Updated package.json
 * 2016-09-04   v0.1.0   First release

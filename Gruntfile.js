@@ -29,9 +29,11 @@ module.exports = function(grunt) {
       options: {
         access_token: '<%= lsToken.lsAccessToken %>',
         store_host: 'rdu.lemonstand.com',
-        theme_api_code: 'bones'
+        theme_api_code: 'laboutTUE008',
+        theme_repository: 'lemonstand/lscloud-theme-laboutique',
       },
-      src: ['resources/**', 'pages/**']
+      // src: ['content/**', 'pages/**', 'partials/**', 'resources/**', 'templates/**', 'theme.yaml']
+      src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
     }
 
   });

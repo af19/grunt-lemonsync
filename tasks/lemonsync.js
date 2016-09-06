@@ -14,21 +14,25 @@ module.exports = function(grunt) {
   var fs = require('fs');
   var https = require('https');
   var mime = require('mime-types');
+  var download = require('download-git-repo');
+  var clone = require('git-clone');
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('lemonsync', 'A grunt plugin for working on LemonStand themes locally.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
+    
     var done = this.async();
     
-    // Merge task-specific and/or target-specific options with these defaults.
+    var lsTask = this;
+    
     var userOptions = this.options({
       access_token: '',
       store_host: '',
-      theme_api_code: ''
+      theme_api_code: '',
+      download_repository: '',
+      clone_repository: false
     });
     
+
     var httpsOptions = {
       headers: {
         'Authorization': 'Bearer ' + userOptions.access_token,
@@ -38,6 +42,12 @@ module.exports = function(grunt) {
       path: '/api/v2/identity/s3',
       method: 'POST'
     };
+    
+    // clone(userOptions.theme_repository, process.cwd(), function(err) {
+    //   if (err) {
+    //     throw err;
+    //   }
+    // });
 
     var request = https.request(httpsOptions, (res) => {
 
@@ -64,47 +74,104 @@ module.exports = function(grunt) {
 
           fileStream.on('open', function () {
             var s3 = new aws.S3();
+            var uploadBucket = bucket + '/' + store + '/themes/' + userOptions.theme_api_code;
+            var s3PathUpload = normalizePath(file);
             
             s3.putObject({
-              Bucket: bucket + '/' + store + '/themes/' + userOptions.theme_api_code,
-              ContentType: mime.contentType(file),
-              CacheControl: 'max-age=86400',
-              Key: file,
-              Body: fileStream
+              Bucket: uploadBucket,
+              Key: s3PathUpload,
+              Body: fileStream,
+              CacheControl: 'no-cache',
+              ContentType: mime.lookup(file),
             }, function (err, data) {
+              
+              function s3Copy(file) {
+                var s3CopyObject = new aws.S3();
+          
+                s3CopyObject.copyObject({
+                  Bucket: bucket + '/' + store + '/themes/' + userOptions.theme_api_code,
+                  CopySource: bucket + '/' + store + '/themes/' + userOptions.theme_api_code + '/' + file,
+                  Key: file,
+                  CacheControl: 'no-cache',
+                  ContentType: mime.lookup(file),
+                  MetadataDirective: 'REPLACE'
+                });
+              }
+              
               if (err) { 
                 throw err; 
               } else {
                 grunt.log.oklns('Uploaded... '+file);
+                // s3Copy(file);
                 // done();
               }
             });
           });
         }
         
-        // For each file, if doesn't exist in .ls-temp directory, write file name to .ls-temp directory and call S3 upload function.
-        // If file exists, compare modification dates of current file to temp file, if current file is newer, repeat above.
-        this.files.forEach(function(file) {
-         
-          for (var i = 0; i < file.src.length; i++) {
-            if (grunt.file.isFile(file.src[i])) {
+        function s3Head(file) {
+          var getObjectHead = new aws.S3();
+          var s3PathCheck = normalizePath(file);
+          
+          getObjectHead.headObject({
+            Bucket: bucket + '/' + store + '/themes/' + userOptions.theme_api_code,
+            Key: s3PathCheck
+          }, function (err, data) {
+            if (err) {
+              s3Upload(file);
+            } else {
+              var lastModifiedRemote = new Date(data.LastModified);
+              var statLocal = fs.statSync(file);
+              var lastModifiedLocal = new Date(statLocal.mtime);
 
-              if ( !grunt.file.exists(".ls-temp/"+file.src[i]) ) {
-                grunt.file.write(".ls-temp/"+file.src[i], '');
-                s3Upload(file.src[i]);
-              } else {
-                var tempStat = fs.statSync(".ls-temp/"+file.src[i]);
-                var currentStat = fs.statSync(file.src[i]);
-                var tempTime = new Date(tempStat.mtime);
-                var currentTime = new Date(currentStat.mtime);
-                if (currentTime > tempTime) {
-                  grunt.file.write(".ls-temp/"+file.src[i], '');
-                  s3Upload(file.src[i]);
-                }
+              if (lastModifiedLocal.getTime() > lastModifiedRemote.getTime()) {
+                s3Upload(file);
+                
               }
             }
-          }
-        });
+          });
+        }
+        
+        function downloadRepo(repo) {
+          download(repo, process.cwd() + '/theme', function(err) {
+            if (err) {
+              throw err;
+            } else {
+              checkFiles();
+            }
+          });
+        }
+        
+        function checkFiles() {
+          lsTask.files.forEach(function(file) {
+            for (var i = 0; i < file.src.length; i++) {
+              if (grunt.file.isFile(file.src[i])) {
+                s3Head(file.src[i]);
+              }
+            }
+          });
+        }
+        
+        function listObjects(repo) {
+          var s3List = new aws.S3();
+          s3List.listObjectsV2({
+            Bucket: repo
+          }, function(err, data) {
+            if (err.statusCode !== 200) {
+              grunt.log.oklns('Downloading theme repository...');
+              downloadRepo(userOptions.theme_repository);
+            } else {
+              checkFiles();
+            }
+          });
+        }
+        
+        function normalizePath(file) {
+          return file.replace('theme/', '');
+        }
+        
+        listObjects(bucket + '/' + store + '/themes/' + userOptions.theme_api_code + '/theme.yaml');
+        
       });
     });
 
