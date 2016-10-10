@@ -29,7 +29,7 @@ grunt.initConfig({
       // Options specific to your LemonStand store go here.
     },
     src: {
-      // Local theme files and folders go here.
+      // Local theme files go here.
     },
   },
 });
@@ -55,11 +55,7 @@ A unique code to identify your theme in LemonStand's backend. The code can conta
 #### options.theme_repository (required)
 Type: `String`
 
-The public git repository to download the theme from. A `/theme` directory will be added to to your project. 
-
-- GitHub - `github:owner/name` or simply `owner/name`
-- GitLab - `gitlab:owner/name`
-- Bitbucket - `bitbucket:owner/name`
+The git repository to clone the theme from. A `/theme` directory will be added to to your project. 
 
 ### Basic Usage Examples
 
@@ -79,7 +75,7 @@ grunt.initConfig({
         access_token: '<%= lsToken.lsAccessToken %>',
         store_host: 'my-store.lemonstand.com',
         theme_api_code: 'my-first-custom-theme',
-        theme_repository: 'lemonstand/ls2-theme-zest'
+        theme_repository: 'https://github.com/lemonstand/ls2-theme-zest'
       },
       src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
     },
@@ -87,7 +83,8 @@ grunt.initConfig({
 ```
 
 ## Release History
-* 2016-09-06   v1.0.0   Themes now imported from git
+* 2016-10-10   v1.1.0   Clone themes from git repository
+* 2016-09-06   v1.0.0   Download and install themes from git repository
 * 2016-09-04   v0.1.2   Added MIME type detection
 * 2016-09-04   v0.1.1   Updated package.json
 * 2016-09-04   v0.1.0   First release

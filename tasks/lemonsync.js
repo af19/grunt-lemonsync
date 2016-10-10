@@ -14,7 +14,6 @@ module.exports = function(grunt) {
   var fs = require('fs');
   var https = require('https');
   var mime = require('mime-types');
-  var download = require('download-git-repo');
   var clone = require('git-clone');
 
 
@@ -28,8 +27,7 @@ module.exports = function(grunt) {
       access_token: '',
       store_host: '',
       theme_api_code: '',
-      download_repository: '',
-      clone_repository: false
+      theme_repository: ''
     });
     
 
@@ -42,12 +40,6 @@ module.exports = function(grunt) {
       path: '/api/v2/identity/s3',
       method: 'POST'
     };
-    
-    // clone(userOptions.theme_repository, process.cwd(), function(err) {
-    //   if (err) {
-    //     throw err;
-    //   }
-
 
     var awsKey;
     var awsSecret;
@@ -95,7 +87,7 @@ module.exports = function(grunt) {
         var s3 = new aws.S3();
         var uploadBucket = bucket + '/' + store + '/themes/' + userOptions.theme_api_code;
         var s3PathUpload = normalizePath(file);
-        
+
         s3.putObject({
           Bucket: uploadBucket,
           Key: s3PathUpload,
@@ -127,7 +119,7 @@ module.exports = function(grunt) {
         });
       });
     }
-        
+    
     function s3Head(file) {
       var getObjectHead = new aws.S3();
       var s3PathCheck = normalizePath(file);
@@ -150,9 +142,9 @@ module.exports = function(grunt) {
         }
       });
     }
-        
-    function downloadRepo(repo) {
-      download(repo, process.cwd() + '/theme', function(err) {
+    
+    function cloneRepo(repo) {
+      clone(repo, process.cwd() + '/theme', function(err) {
         if (err) {
           throw err;
         } else {
@@ -178,7 +170,7 @@ module.exports = function(grunt) {
       }, function(err, data) {
         if (err.statusCode !== 200) {
           grunt.log.oklns('Downloading theme repository...');
-          downloadRepo(userOptions.theme_repository);
+          cloneRepo(userOptions.theme_repository);
         } else {
           checkFiles();
         }
@@ -189,8 +181,7 @@ module.exports = function(grunt) {
       return file.replace('theme/', '');
     }
     
-    
-    
+
   });
 
 };
