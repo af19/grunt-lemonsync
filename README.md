@@ -83,6 +83,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+* 2016-10-10   v1.2.0   Performance improvements
 * 2016-10-10   v1.1.0   Clone themes from git repository
 * 2016-09-06   v1.0.0   Download and install themes from git repository
 * 2016-09-04   v0.1.2   Added MIME type detection

@@ -1,7 +1,7 @@
 {
   "name": "grunt-lemonsync",
   "description": "A grunt plugin for working on LemonStand themes locally and pushing changes to stores.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/af19/grunt-lemonsync",
   "author": {
     "name": "Amir Farzan",
