@@ -83,7 +83,7 @@ grunt.initConfig({
 ```
 
 ## Release History
-* 2016-10-11   v1.2.0   Bug fixes
+* 2016-10-11   v1.2.1   Bug fixes
 * 2016-10-10   v1.2.0   Performance improvements
 * 2016-10-10   v1.1.0   Clone themes from git repository
 * 2016-09-06   v1.0.0   Download and install themes from git repository
