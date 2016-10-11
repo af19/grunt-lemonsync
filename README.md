@@ -78,11 +78,12 @@ grunt.initConfig({
         theme_repository: 'https://github.com/lemonstand/ls2-theme-zest'
       },
       src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
-    },
+    }
 });
 ```
 
 ## Release History
+* 2016-10-11   v1.2.0   Bug fixes
 * 2016-10-10   v1.2.0   Performance improvements
 * 2016-10-10   v1.1.0   Clone themes from git repository
 * 2016-09-06   v1.0.0   Download and install themes from git repository

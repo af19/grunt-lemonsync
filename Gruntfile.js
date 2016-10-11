@@ -15,10 +15,23 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
-        'tasks/*.js'
+        'tasks/*.js',
+        'tasks/src/*.js'
       ],
       options: {
         jshintrc: '.jshintrc'
+      }
+    },
+    
+    babel: {
+      options: {
+        sourceMap: true,
+        presets: ['babel-preset-es2015']
+      },
+      dist: {
+        files: {
+          'tasks/lemonsync.js': 'tasks/src/lemonsync-src.js'
+        }
       }
     },
 
@@ -29,7 +42,7 @@ module.exports = function(grunt) {
       options: {
         access_token: '<%= lsToken.lsAccessToken %>',
         store_host: 'rdu.lemonstand.com',
-        theme_api_code: 'coastalFull2UrlTG',
+        theme_api_code: 'coastal-20161011-1144',
         theme_repository: 'https://github.com/lemonstand/lscloud-theme-coastal',
 
       },
@@ -43,8 +56,9 @@ module.exports = function(grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-babel');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'lemonsync']);
+  grunt.registerTask('default', ['jshint', 'babel', 'lemonsync']);
 
 };
