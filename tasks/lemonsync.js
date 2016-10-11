@@ -120,29 +120,6 @@ module.exports = function(grunt) {
       });
     }
     
-    function s3Head(file) {
-      var getObjectHead = new aws.S3();
-      var s3PathCheck = normalizePath(file);
-      
-      getObjectHead.headObject({
-        Bucket: bucket + '/' + store + '/themes/' + userOptions.theme_api_code,
-        Key: s3PathCheck
-      }, function (err, data) {
-        if (err) {
-          s3Upload(file);
-        } else {
-          var lastModifiedRemote = new Date(data.LastModified);
-          var statLocal = fs.statSync(file);
-          var lastModifiedLocal = new Date(statLocal.mtime);
-
-          if (lastModifiedLocal.getTime() > lastModifiedRemote.getTime()) {
-            s3Upload(file);
-            
-          }
-        }
-      });
-    }
-    
     function cloneRepo(repo) {
       clone(repo, process.cwd() + '/theme', function(err) {
         if (err) {
@@ -156,8 +133,22 @@ module.exports = function(grunt) {
     function checkFiles() {
       lsTask.files.forEach(function(file) {
         for (var i = 0; i < file.src.length; i++) {
+          
           if (grunt.file.isFile(file.src[i])) {
-            s3Head(file.src[i]);
+            
+            if ( !grunt.file.exists(".ls-temp/"+file.src[i]) ) {
+                grunt.file.write(".ls-temp/"+file.src[i], '');
+                s3Upload(file.src[i]);
+            } else {
+              var tempStat = fs.statSync(".ls-temp/"+file.src[i]);
+              var currentStat = fs.statSync(file.src[i]);
+              var tempTime = new Date(tempStat.mtime);
+              var currentTime = new Date(currentStat.mtime);
+              if (currentTime.getTime() > tempTime.getTime()) {
+                grunt.file.write(".ls-temp/"+file.src[i], '');
+                s3Upload(file.src[i]);
+              }
+            }
           }
         }
       });
