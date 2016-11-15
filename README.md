@@ -107,6 +107,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+* 2016-11-14   v1.3.2   Updated Readme
 * 2016-11-14   v1.3.0   Download modified files from LS store
 * 2016-10-11   v1.2.1   Bug fixes
 * 2016-10-10   v1.2.0   Performance improvements
