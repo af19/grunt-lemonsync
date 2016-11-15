@@ -59,6 +59,7 @@ The git repository to clone the theme from. A `/theme` directory will be added t
 
 #### options.clean (optional)
 Type: `String`
+
 Values:
 - `local` - replaces local theme files with store theme files
 - `remote` - deletes theme files from store that do not exist locally
@@ -79,11 +80,11 @@ In this example, the LemonStand Access Token is loaded via a JSON file.
 ```
 
 ```js
+var target = grunt.option('clean') || false;
+
 grunt.initConfig({
 
   lsConfig: grunt.file.readJSON('lemonstand-config.json'),
-
-  var target = grunt.option('clean') || false;
 
   lemonsync: {
       options: {
