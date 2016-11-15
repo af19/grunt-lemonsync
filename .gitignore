@@ -1,6 +1,7 @@
 node_modules
 npm-debug.log
 tmp
-lemonstand-token.json
+lemonstand-config.json
 .c9
-.jshintrc
+.ls-temp
+theme
