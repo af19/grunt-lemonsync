@@ -57,32 +57,56 @@ Type: `String`
 
 The git repository to clone the theme from. A `/theme` directory will be added to to your project. 
 
+#### options.clean (optional)
+Type: `String`
+Values:
+- `local` - replaces local theme files with store theme files
+- `remote` - deletes theme files from store that do not exist locally
+
+You can use a flag to indicate whether you'd like to traget the local or remote theme.
+E.G. `grunt --clean=local`
+
+
 ### Basic Usage Examples
 
 In this example, the LemonStand Access Token is loaded via a JSON file.
 
 ```JSON
 {
-  "lsAccessToken": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  "lsAccessToken": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "lsStore": "my-store.lemonstand.com"
 }
 ```
 
 ```js
 grunt.initConfig({
-  lsToken: grunt.file.readJSON('lemonstand-token.json'),
+
+  lsConfig: grunt.file.readJSON('lemonstand-config.json'),
+
+  var target = grunt.option('clean') || false;
+
   lemonsync: {
       options: {
-        access_token: '<%= lsToken.lsAccessToken %>',
-        store_host: 'my-store.lemonstand.com',
+        access_token: '<%= lsConfig.lsAccessToken %>',
+        store_host: '<%= lsConfig.lsStore %>',
         theme_api_code: 'my-first-custom-theme',
-        theme_repository: 'https://github.com/lemonstand/ls2-theme-zest'
+        theme_repository: 'https://github.com/lemonstand/ls2-theme-zest',
+        clean: target
       },
-      src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
+      src: [
+        'theme/content/**', 
+        'theme/pages/**', 
+        'theme/partials/**', 
+        'theme/resources/**', 
+        'theme/templates/**', 
+        'theme/theme.yaml'
+      ]
     }
 });
 ```
 
 ## Release History
+* 2016-11-14   v1.3.0   Download modified files from LS store
 * 2016-10-11   v1.2.1   Bug fixes
 * 2016-10-10   v1.2.0   Performance improvements
 * 2016-10-10   v1.1.0   Clone themes from git repository

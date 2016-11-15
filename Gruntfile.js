@@ -10,12 +10,13 @@
 
 module.exports = function(grunt) {
 
+  var target = grunt.option('clean') || false;
+
   // Project configuration.
   grunt.initConfig({
     jshint: {
       all: [
         'Gruntfile.js',
-        'tasks/*.js',
         'tasks/src/*.js'
       ],
       options: {
@@ -36,17 +37,24 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    lsToken: grunt.file.readJSON('lemonstand-token.json'),
+    lsConfig: grunt.file.readJSON('lemonstand-config.json'),
     
     lemonsync: {
       options: {
-        access_token: '<%= lsToken.lsAccessToken %>',
-        store_host: 'rdu.lemonstand.com',
-        theme_api_code: 'coastal-20161011-1144',
+        access_token: '<%= lsConfig.lsAccessToken %>',
+        store_host: '<%= lsConfig.lsStore %>',
+        theme_api_code: 'coastal-new',
         theme_repository: 'https://github.com/lemonstand/lscloud-theme-coastal',
-
+        clean: target
       },
-      src: ['theme/content/**', 'theme/pages/**', 'theme/partials/**', 'theme/resources/**', 'theme/templates/**', 'theme/theme.yaml']
+      src: [
+        'theme/content/**', 
+        'theme/pages/**', 
+        'theme/partials/**', 
+        'theme/resources/**', 
+        'theme/templates/**', 
+        'theme/theme.yaml'
+      ] 
     }
 
   });
@@ -59,6 +67,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-babel');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'babel', 'lemonsync']);
+  grunt.registerTask('lint', ['jshint', 'babel']);
+  grunt.registerTask('default', ['lemonsync']);
 
 };
