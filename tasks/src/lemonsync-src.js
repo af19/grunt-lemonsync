@@ -223,7 +223,9 @@ module.exports = function(grunt) {
           for (var i = 0; i < data.KeyCount; i++) {
             objectKey = data.Contents[i].Key;
             var saveLocation = "theme/" + objectKey.replace(store + '/themes/' + userOptions.theme_api_code + '/', '');
-            getAllObjects(objectKey, saveLocation);
+            if (saveLocation.indexOf('.git') === -1) {
+              getAllObjects(objectKey, saveLocation);
+            }
           }
 
         } else if (target === 'remote') {
