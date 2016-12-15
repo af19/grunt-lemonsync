@@ -40,7 +40,7 @@ grunt.initConfig({
 #### options.access_token (required)
 Type: `String`
 
-The LemonStand Access Token. You can load it via JSON as shown in the [example](#basic-usage-examples) (remember to store your token in a secure place and exclude it from commits).
+The LemonStand _API Token_. You can load it via JSON as shown in the [example](#basic-usage-examples) (remember, the token is a private credentia, and should not checked in to your Git repository).
 
 #### options.store_host (required)
 Type: `String`
@@ -107,6 +107,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+
 * 2016-11-14   v1.3.3   Bug fixes
 * 2016-11-14   v1.3.2   Doc updates
 * 2016-11-14   v1.3.1   Doc updates
